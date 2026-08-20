@@ -1,6 +1,6 @@
 {
   "name": "get-next-env",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Type-safe runtime environment variables for Next.js. Build once, deploy everywhere.",
   "license": "MIT",
   "author": "Manish Thomas",
@@ -24,7 +24,12 @@
       "default": "./dist/index.js"
     }
   },
-  "files": ["dist", "README.md", "LICENSE", "CHANGELOG.md"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
   "engines": {
     "node": ">=18.0.0"
   },
