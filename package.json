@@ -1,0 +1,67 @@
+{
+  "name": "get-next-env",
+  "version": "0.1.0",
+  "description": "Type-safe runtime environment variables for Next.js. Build once, deploy everywhere.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "react-server": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE", "CHANGELOG.md"],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "keywords": [
+    "nextjs",
+    "env",
+    "environment-variables",
+    "runtime",
+    "docker",
+    "kubernetes",
+    "type-safe",
+    "type-safe-environment-variables"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "lint": "biome check .",
+    "prepublishOnly": "npm run build",
+    "size": "size-limit",
+    "changeset": "changeset",
+    "release": "changeset publish"
+  },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "import": "{ createEnv }",
+      "limit": "600 B"
+    }
+  ],
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@changesets/cli": "^2.27.12",
+    "@size-limit/preset-small-lib": "^11.1.6",
+    "@types/node": "^22.13.4",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "happy-dom": "^16.8.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "size-limit": "^11.1.6",
+    "tsup": "^8.3.6",
+    "typescript": "^5.7.3",
+    "valibot": "^1.0.0-beta.9",
+    "vitest": "^3.0.5",
+    "zod": "^3.24.2"
+  }
+}
