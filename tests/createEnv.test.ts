@@ -100,22 +100,6 @@ describe("createEnv", () => {
     expect(() => env.validate()).toThrowError(/Validation failed for "PORT"/);
   });
 
-  it("rejects async Standard Schema validators", () => {
-    process.env.PORT = "8080";
-    const env = createEnv({
-      PORT: {
-        env: "PORT",
-        schema: {
-          "~standard": {
-            validate: (_val: unknown) => Promise.resolve({ value: _val }),
-          },
-        },
-      },
-    });
-
-    expect(() => env.validate()).toThrowError(/Async schema validation/);
-  });
-
   it("no-schema mode works (just strings)", () => {
     process.env.FOO = "bar";
     const env = createEnv({
@@ -131,5 +115,20 @@ describe("createEnv", () => {
       googleMapApiKey: { env: "NEXT_PUBLIC_MAP_KEY" },
     });
     expect(env.get("googleMapApiKey")).toBe("map-123");
+  });
+
+  it("rejects async Standard Schema validators", () => {
+    process.env.PORT = "8080";
+    const env = createEnv({
+      PORT: {
+        env: "PORT",
+        schema: {
+          "~standard": {
+            validate: (_val: unknown) => Promise.resolve({ value: _val }),
+          },
+        },
+      },
+    });
+    expect(() => env.validate()).toThrowError(/Async schema validation/);
   });
 });
