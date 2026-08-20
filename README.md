@@ -137,7 +137,7 @@ Call `validate()` during application initialization or server startup to ensure 
 
 ```typescript
 env.validate();
-// Throws: [nextenv] Missing "GOOGLEMAP_API_KEY" (process.env.GOOGLEMAP_API_KEY)
+// Throws: [get-next-env] Missing "GOOGLEMAP_API_KEY" (process.env.GOOGLEMAP_API_KEY)
 ```
 
 ---
@@ -155,7 +155,12 @@ React component that injects `window.__NEXTENV` into the page HTML via a plain `
   * `nonce` *(optional)*: Content Security Policy (CSP) nonce string.
 
 ### `env.validate()`
-Validates that required environment variables exist and conform to their schemas.
+Validates that required environment variables exist and conform to their schemas. Supports three validator interfaces (checked in order):
+1. **Standard Schema** (`~standard` property) — Zod ≥3.24, Valibot, ArkType
+2. **`safeParse()`** — Zod (all versions)
+3. **`parse()`** — Any validator with a parse method
+
+If no schema is provided, `validate()` only checks that required variables are present.
 
 ---
 
@@ -166,6 +171,8 @@ Validates that required environment variables exist and conform to their schemas
 3. **XSS Protection**: `safeSerialize` encodes HTML breakout sequences (`<`, `>`, `&`) and Unicode line separators (`\u2028`, `\u2029`).
 4. **Prototype Pollution Protection**: Internal cache is instantiated using `Object.create(null)`.
 5. **CSP Nonce Support**: Compatible with custom CSP nonces and includes `suppressHydrationWarning`.
+
+> **Important:** Only include variables in your `createEnv` config that you are comfortable exposing to the browser.
 
 ---
 

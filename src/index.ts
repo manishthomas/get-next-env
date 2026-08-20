@@ -85,7 +85,7 @@ export function createEnv<T extends EnvConfig>(config: T): EnvInstance<T> {
 
         if (val === undefined) {
           throw new Error(
-            `[nextenv] Missing "${String(key)}" (process.env.${envKey})`,
+            `[get-next-env] Missing "${String(key)}" (process.env.${envKey})`,
           );
         }
 
@@ -94,10 +94,15 @@ export function createEnv<T extends EnvConfig>(config: T): EnvInstance<T> {
           const std = schema["~standard"];
           if (std && typeof std.validate === "function") {
             const res = std.validate(val);
+            if (res instanceof Promise) {
+              throw new Error(
+                "[get-next-env] Async schema validation is not supported",
+              );
+            }
             if (res?.issues?.length) {
               const msg = res.issues.map((i: any) => i.message).join(", ");
               throw new Error(
-                `[nextenv] Validation failed for "${String(key)}": ${msg}`,
+                `[get-next-env] Validation failed for "${String(key)}": ${msg}`,
               );
             }
           } else if (typeof schema.safeParse === "function") {
@@ -107,7 +112,7 @@ export function createEnv<T extends EnvConfig>(config: T): EnvInstance<T> {
                 ? res.error.issues.map((i: any) => i.message).join(", ")
                 : String(res.error);
               throw new Error(
-                `[nextenv] Validation failed for "${String(key)}": ${msg}`,
+                `[get-next-env] Validation failed for "${String(key)}": ${msg}`,
               );
             }
           } else if (typeof schema.parse === "function") {
@@ -115,7 +120,7 @@ export function createEnv<T extends EnvConfig>(config: T): EnvInstance<T> {
               schema.parse(val);
             } catch (err: any) {
               throw new Error(
-                `[nextenv] Validation failed for "${String(key)}": ${err.message || String(err)}`,
+                `[get-next-env] Validation failed for "${String(key)}": ${err.message || String(err)}`,
               );
             }
           }
@@ -127,6 +132,7 @@ export function createEnv<T extends EnvConfig>(config: T): EnvInstance<T> {
       return safeSerialize(getCache());
     },
 
+    /** @internal */
     __reset() {
       cache = null;
     },
